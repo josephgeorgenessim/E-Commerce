@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     console.log("hi admin")
     // Get user's initials for avatar fallback
     const getInitials = (name) => {
-        if (!name) return "U";
+        if (!name) return "A";
         return name.split(' ').map(n => n[0]).join('').toUpperCase();
     };
 
@@ -80,12 +80,12 @@ const AdminDashboard = () => {
                 <div className="px-3 py-4 border-t mt-auto">
                     <div className="flex items-center gap-3 mb-3">
                         <Avatar>
-                            <AvatarImage src={currentUser.avatar} />
-                            <AvatarFallback>{getInitials(currentUser.name)}</AvatarFallback>
+                            <AvatarImage src={currentUser?.avatar} />
+                            <AvatarFallback>{getInitials(currentUser?.name)}</AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className="text-sm font-medium">{currentUser.name}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{currentUser.email}</p>
+                            <p className="text-sm font-medium">{currentUser?.name || 'Admin User'}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{currentUser?.email || 'admin@example.com'}</p>
                         </div>
                     </div>
                     <LogoutButton className="w-full" />
@@ -119,8 +119,8 @@ const AdminDashboard = () => {
 
                             <div className="md:hidden">
                                 <Avatar>
-                                    <AvatarImage src={currentUser.avatar} />
-                                    <AvatarFallback>{getInitials(currentUser.name)}</AvatarFallback>
+                                    <AvatarImage src={currentUser?.avatar} />
+                                    <AvatarFallback>{getInitials(currentUser?.name)}</AvatarFallback>
                                 </Avatar>
                             </div>
                         </div>

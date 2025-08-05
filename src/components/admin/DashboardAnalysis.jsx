@@ -37,25 +37,38 @@ ChartJS.register(
 
 const DashboardAnalysis = () => {
     const currentUser = useSelector(selectCurrentUser);
-    const orders = useSelector(state => selectOrdersByAdminId(state, currentUser.id));
+    const orders = useSelector(state => selectOrdersByAdminId(state, currentUser?.id));
     const [products, setProducts] = useState([]);
 
     // Load products for the current admin
     useEffect(() => {
         if (currentUser && currentUser.id) {
-            const adminProducts = getProductsByAdminId(currentUser.id);
-            setProducts(adminProducts);
+            try {
+                const adminProducts = getProductsByAdminId(currentUser.id);
+                setProducts(adminProducts || []);
+            } catch (error) {
+                console.error('Error loading admin products:', error);
+                setProducts([]);
+            }
         }
     }, [currentUser]);
 
     // Calculate metrics
     const totalRevenue = orders.reduce((sum, order) => {
-        const adminItems = order.cartItems.filter(item => item.adminId === currentUser.id);
+        if (!order.cartItems) return sum;
+        const adminItems = order.cartItems.filter(item =>
+            item.adminId === currentUser?.id ||
+            item.adminId === parseInt(currentUser?.id)
+        );
         return sum + adminItems.reduce((itemSum, item) => itemSum + (item.price * item.quantity), 0);
     }, 0);
 
     const totalItemsSold = orders.reduce((sum, order) => {
-        const adminItems = order.cartItems.filter(item => item.adminId === currentUser.id);
+        if (!order.cartItems) return sum;
+        const adminItems = order.cartItems.filter(item =>
+            item.adminId === currentUser?.id ||
+            item.adminId === parseInt(currentUser?.id)
+        );
         return sum + adminItems.reduce((itemSum, item) => itemSum + item.quantity, 0);
     }, 0);
 
@@ -67,10 +80,14 @@ const DashboardAnalysis = () => {
 
     // Group by month for revenue trend
     const monthlyRevenue = orders.reduce((acc, order) => {
+        if (!order.cartItems) return acc;
         const date = new Date(order.date);
         const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
 
-        const adminItems = order.cartItems.filter(item => item.adminId === currentUser.id);
+        const adminItems = order.cartItems.filter(item =>
+            item.adminId === currentUser?.id ||
+            item.adminId === parseInt(currentUser?.id)
+        );
         const orderTotal = adminItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
         acc[monthYear] = (acc[monthYear] || 0) + orderTotal;
@@ -220,7 +237,7 @@ const DashboardAnalysis = () => {
         <div>
             <div className="mb-6">
                 <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-                <p className="text-gray-500 dark:text-gray-400">Welcome back, {currentUser.name}. Here's an overview of your store.</p>
+                <p className="text-gray-500 dark:text-gray-400">Welcome back, {currentUser?.name || 'Admin'}. Here's an overview of your store.</p>
             </div>
 
             {/* Summary Cards */}

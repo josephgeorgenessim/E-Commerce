@@ -1,0 +1,509 @@
+[
+    {
+        "id": "1",
+        "name": "Premium Bluetooth Headphones",
+        "description": "Experience crystal-clear sound with our noise-cancelling wireless headphones. Perfect for music lovers and professionals alike.",
+        "longDescription": "Immerse yourself in superior sound quality with our Premium Bluetooth Headphones. These state-of-the-art headphones feature active noise cancellation technology that blocks out ambient noise, allowing you to focus on your music or calls. With plush ear cushions and an adjustable headband, they're designed for extended wear comfort. The built-in microphone ensures crystal-clear calls, while the intuitive touch controls make it easy to manage your music and calls on the go.",
+        "price": 149.99,
+        "category": "Electronics",
+        "subcategory": "Audio",
+        "image": "https://source.unsplash.com/random/300x300/?headphones",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?headphones",
+            "https://source.unsplash.com/random/800x600/?headphones&sig=1",
+            "https://source.unsplash.com/random/800x600/?headphones&sig=2",
+            "https://source.unsplash.com/random/800x600/?headphones&sig=3"
+        ],
+        "stock": 50,
+        "rating": 4.8,
+        "reviews": 124,
+        "featured": true,
+        "discount": 0,
+        "new": false,
+        "adminId": 1,
+        "specs": {
+            "brand": "AudioTech",
+            "connectivity": "Bluetooth 5.0",
+            "batteryLife": "30 hours",
+            "color": [
+                "Black",
+                "Silver",
+                "White"
+            ],
+            "weight": "250g",
+            "noiseReduction": "Active Noise Cancellation",
+            "warranty": "2 years"
+        },
+        "createdAt": "2023-01-15T08:00:00.000Z",
+        "updatedAt": "2023-10-25T14:30:00.000Z"
+    },
+    {
+        "id": "2",
+        "name": "Ultra-Slim Laptop",
+        "description": "Powerful, lightweight laptop perfect for productivity and entertainment on the go. Features the latest processor and all-day battery life.",
+        "longDescription": "The Ultra-Slim Laptop is the perfect blend of power and portability. At just 0.6 inches thick and weighing only 2.8 pounds, it's designed to go wherever you do. Despite its slim profile, it packs a powerful punch with the latest Intel i7 processor, 16GB of RAM, and a blazing-fast 512GB SSD. The vibrant 15.6-inch 4K display brings your content to life with stunning clarity and vivid colors. Whether you're working on demanding tasks, streaming your favorite shows, or gaming on the go, this laptop delivers exceptional performance without compromising on battery life.",
+        "price": 899.99,
+        "category": "Electronics",
+        "subcategory": "Computers",
+        "image": "https://source.unsplash.com/random/300x300/?laptop",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?laptop",
+            "https://source.unsplash.com/random/800x600/?laptop&sig=1",
+            "https://source.unsplash.com/random/800x600/?laptop&sig=2",
+            "https://source.unsplash.com/random/800x600/?laptop&sig=3"
+        ],
+        "stock": 25,
+        "rating": 4.6,
+        "reviews": 89,
+        "featured": true,
+        "discount": 10,
+        "new": false,
+        "adminId": 1,
+        "specs": {
+            "brand": "TechPro",
+            "processor": "Intel i7 12th Gen",
+            "memory": "16GB RAM",
+            "storage": "512GB SSD",
+            "display": "15.6\" 4K",
+            "batteryLife": "12 hours",
+            "operatingSystem": "Windows 11",
+            "graphicsCard": "NVIDIA GeForce RTX 3050",
+            "ports": [
+                "2x USB-C",
+                "1x USB-A",
+                "HDMI",
+                "Headphone Jack"
+            ],
+            "dimensions": "14.1 x 9.2 x 0.6 inches",
+            "weight": "2.8 lbs"
+        },
+        "createdAt": "2023-02-10T10:15:00.000Z",
+        "updatedAt": "2023-10-28T11:45:00.000Z"
+    },
+    {
+        "id": "3",
+        "name": "Smart Fitness Watch",
+        "description": "Track your fitness goals with precision. Monitors heart rate, steps, sleep, and more. Water-resistant and long battery life.",
+        "longDescription": "Take control of your fitness journey with our Smart Fitness Watch. This comprehensive health companion tracks your activities 24/7, providing detailed insights into your steps, distance, calories burned, heart rate, and sleep quality. With built-in GPS, you can accurately map your runs and cycling routes without carrying your phone. The watch features over 20 sport modes to track specific workouts, from running and cycling to swimming and yoga. The vibrant touchscreen display is easy to read even in bright sunlight, and the watch is water-resistant up to 50 meters, making it perfect for swimming and water sports.",
+        "price": 79.99,
+        "category": "Electronics",
+        "subcategory": "Wearables",
+        "image": "https://source.unsplash.com/random/300x300/?smartwatch",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?smartwatch",
+            "https://source.unsplash.com/random/800x600/?smartwatch&sig=1",
+            "https://source.unsplash.com/random/800x600/?smartwatch&sig=2",
+            "https://source.unsplash.com/random/800x600/?smartwatch&sig=3"
+        ],
+        "stock": 100,
+        "rating": 4.5,
+        "reviews": 210,
+        "featured": false,
+        "discount": 0,
+        "new": true,
+        "adminId": 2,
+        "specs": {
+            "brand": "FitLife",
+            "connectivity": "Bluetooth 5.0",
+            "batteryLife": "7 days",
+            "waterResistant": "50m (5 ATM)",
+            "sensors": [
+                "Heart rate",
+                "GPS",
+                "Accelerometer",
+                "Gyroscope",
+                "SpO2"
+            ],
+            "compatibility": "iOS 12+, Android 8.0+",
+            "display": "1.4\" AMOLED",
+            "sportModes": 20,
+            "color": [
+                "Black",
+                "Blue",
+                "Pink",
+                "Green"
+            ],
+            "chargingTime": "2 hours"
+        },
+        "createdAt": "2023-05-20T09:00:00.000Z",
+        "updatedAt": "2023-10-30T15:20:00.000Z"
+    },
+    {
+        "id": "4",
+        "name": "Professional DSLR Camera",
+        "description": "Capture stunning photos and videos with this high-end digital camera. Features 32MP resolution and 4K video recording.",
+        "longDescription": "Elevate your photography and videography with our Professional DSLR Camera. This high-performance camera is designed for both professionals and serious enthusiasts who demand exceptional image quality and versatility. The 32MP full-frame sensor captures incredible detail and performs exceptionally well in low-light conditions. Record stunning 4K video at 60fps for smooth, cinematic footage. The advanced autofocus system with 61 focus points ensures you never miss a shot, while the weather-sealed body allows you to shoot in challenging conditions. The intuitive controls and customizable buttons make it easy to access your most-used settings quickly.",
+        "price": 1299.99,
+        "category": "Electronics",
+        "subcategory": "Cameras",
+        "image": "https://source.unsplash.com/random/300x300/?camera",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?camera",
+            "https://source.unsplash.com/random/800x600/?camera&sig=1",
+            "https://source.unsplash.com/random/800x600/?camera&sig=2",
+            "https://source.unsplash.com/random/800x600/?camera&sig=3"
+        ],
+        "stock": 15,
+        "rating": 4.9,
+        "reviews": 56,
+        "featured": true,
+        "discount": 5,
+        "new": false,
+        "specs": {
+            "brand": "OptiMax",
+            "megapixels": "32MP",
+            "videoResolution": "4K 60fps, 1080p 120fps",
+            "sensorType": "Full-frame CMOS",
+            "weight": "680g",
+            "batteryLife": "1000 shots",
+            "iso": "100-51,200 (expandable to 204,800)",
+            "shutterSpeed": "1/8000 to 30 seconds",
+            "viewfinder": "OLED, 3.69 million dots",
+            "screenSize": "3.2\" vari-angle touchscreen",
+            "storage": "Dual SD card slots (UHS-II compatible)",
+            "connectivity": [
+                "Wi-Fi",
+                "Bluetooth",
+                "USB-C",
+                "HDMI",
+                "Microphone input",
+                "Headphone output"
+            ],
+            "weatherSealing": "Dust and moisture resistant"
+        },
+        "createdAt": "2023-03-15T14:30:00.000Z",
+        "updatedAt": "2023-10-29T18:10:00.000Z"
+    },
+    {
+        "id": "5",
+        "name": "Designer Leather Backpack",
+        "description": "Stylish and functional backpack made from genuine leather. Perfect for everyday use with laptop compartment and multiple pockets.",
+        "longDescription": "Combine style and functionality with our Designer Leather Backpack. Crafted from premium genuine leather that develops a beautiful patina over time, this backpack is built to last for years. The spacious main compartment easily fits books, clothes, and everyday essentials, while the padded laptop sleeve safely holds devices up to 15 inches. Multiple interior and exterior pockets keep your smaller items organized and accessible. The adjustable shoulder straps and padded back panel ensure comfortable carrying even when fully loaded. Whether you're commuting to work, traveling, or just going about your day, this backpack adds a touch of sophistication to any outfit.",
+        "price": 129.99,
+        "category": "Fashion",
+        "subcategory": "Bags",
+        "image": "https://source.unsplash.com/random/300x300/?leather-backpack",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?leather-backpack",
+            "https://source.unsplash.com/random/800x600/?leather-backpack&sig=1",
+            "https://source.unsplash.com/random/800x600/?leather-backpack&sig=2",
+            "https://source.unsplash.com/random/800x600/?leather-backpack&sig=3"
+        ],
+        "stock": 35,
+        "rating": 4.7,
+        "reviews": 128,
+        "featured": false,
+        "discount": 0,
+        "new": false,
+        "specs": {
+            "brand": "LuxuryStyle",
+            "material": "Genuine full-grain leather",
+            "dimensions": "16\" x 12\" x 6\"",
+            "capacity": "22L",
+            "color": [
+                "Brown",
+                "Black",
+                "Tan"
+            ],
+            "waterResistant": true,
+            "laptopCompartment": "Fits up to 15\" laptop",
+            "pockets": "3 exterior, 5 interior",
+            "closure": "Top zipper and magnetic snap flap",
+            "hardware": "Antique brass",
+            "lining": "Cotton canvas",
+            "warranty": "Lifetime craftsmanship warranty"
+        },
+        "createdAt": "2023-04-05T11:00:00.000Z",
+        "updatedAt": "2023-10-27T09:30:00.000Z"
+    },
+    {
+        "id": "6",
+        "name": "Stainless Steel Water Bottle",
+        "description": "Eco-friendly, insulated water bottle that keeps drinks cold for 24 hours or hot for 12 hours. Leak-proof design with stylish finish.",
+        "longDescription": "Stay hydrated in style with our premium Stainless Steel Water Bottle. Engineered with double-wall vacuum insulation, this bottle keeps your beverages at the perfect temperature - cold drinks stay icy for up to 24 hours, while hot drinks remain steaming for up to 12 hours. The durable 18/8 food-grade stainless steel construction won't transfer flavors and resists rust and corrosion. The leak-proof cap ensures your bag stays dry, and the powder-coated exterior provides a slip-free grip while preventing condensation. By choosing our reusable water bottle, you're not only upgrading your hydration experience but also reducing single-use plastic waste.",
+        "price": 24.99,
+        "category": "Lifestyle",
+        "subcategory": "Kitchen",
+        "image": "https://source.unsplash.com/random/300x300/?water-bottle",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?water-bottle",
+            "https://source.unsplash.com/random/800x600/?water-bottle&sig=1",
+            "https://source.unsplash.com/random/800x600/?water-bottle&sig=2",
+            "https://source.unsplash.com/random/800x600/?water-bottle&sig=3"
+        ],
+        "stock": 200,
+        "rating": 4.4,
+        "reviews": 312,
+        "featured": false,
+        "discount": 0,
+        "new": false,
+        "specs": {
+            "brand": "EcoHydrate",
+            "material": "18/8 Stainless steel",
+            "capacity": "24oz (710ml)",
+            "insulation": "Double-wall vacuum",
+            "color": [
+                "Midnight Blue",
+                "Matte Black",
+                "Forest Green",
+                "Ruby Red",
+                "Arctic White"
+            ],
+            "dishwasherSafe": false,
+            "mouthType": "Standard mouth",
+            "capType": "Screw cap with silicone seal",
+            "dimensions": "10.5\" height, 2.9\" diameter",
+            "weight": "12.8oz (empty)",
+            "keepsCold": "24 hours",
+            "keepsHot": "12 hours",
+            "bpaFree": true
+        },
+        "createdAt": "2023-01-20T16:45:00.000Z",
+        "updatedAt": "2023-10-31T13:20:00.000Z"
+    },
+    {
+        "id": "7",
+        "name": "Smart Home Security Camera",
+        "description": "Keep your home safe with this wireless security camera. Features motion detection, night vision, and two-way audio.",
+        "longDescription": "Enhance your home security with our Smart Home Security Camera. This advanced wireless camera provides 24/7 surveillance with crystal-clear 1080p HD video quality. The wide-angle lens captures a comprehensive view of your space, while night vision ensures you can see clearly even in complete darkness up to 30 feet away. Receive instant alerts on your smartphone when the camera detects motion or sound, allowing you to check in immediately. The two-way audio feature lets you communicate with family members or deter unwanted visitors. With flexible storage options including cloud storage and local SD card backup, you'll never miss important footage. Easy to install and compatible with your favorite smart home systems.",
+        "price": 89.99,
+        "category": "Electronics",
+        "subcategory": "Smart Home",
+        "image": "https://source.unsplash.com/random/300x300/?security-camera",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?security-camera",
+            "https://source.unsplash.com/random/800x600/?security-camera&sig=1",
+            "https://source.unsplash.com/random/800x600/?security-camera&sig=2",
+            "https://source.unsplash.com/random/800x600/?security-camera&sig=3"
+        ],
+        "stock": 70,
+        "rating": 4.3,
+        "reviews": 95,
+        "featured": false,
+        "discount": 15,
+        "new": true,
+        "specs": {
+            "brand": "SafeGuard",
+            "resolution": "1080p HD",
+            "connectivity": "Wi-Fi",
+            "storage": [
+                "Cloud",
+                "microSD (up to 128GB)"
+            ],
+            "powerSource": [
+                "Wired",
+                "Battery (rechargeable)"
+            ],
+            "weatherproof": true,
+            "fieldOfView": "130° wide-angle",
+            "nightVision": "Infrared, up to 30ft",
+            "motionDetection": "Advanced AI detection with zone setting",
+            "audioFeatures": "Noise cancellation, two-way audio",
+            "dimensions": "3.5\" x 2.3\" x 2.3\"",
+            "weight": "5.3oz",
+            "smartHomeCompatibility": [
+                "Alexa",
+                "Google Assistant",
+                "HomeKit"
+            ],
+            "warranty": "2 years"
+        },
+        "createdAt": "2023-06-10T08:30:00.000Z",
+        "updatedAt": "2023-11-01T10:15:00.000Z"
+    },
+    {
+        "id": "8",
+        "name": "Organic Cotton T-Shirt",
+        "description": "Comfortable, eco-friendly t-shirt made from 100% organic cotton. Available in multiple colors and sizes.",
+        "longDescription": "Experience the perfect blend of comfort and sustainability with our Organic Cotton T-Shirt. Made from 100% GOTS-certified organic cotton that's grown without harmful pesticides or synthetic fertilizers, this t-shirt is as kind to your skin as it is to the planet. The medium-weight fabric (180 gsm) offers durability while maintaining breathability and softness. The relaxed fit and reinforced shoulder seams ensure long-lasting comfort and shape retention, while the pre-shrunk fabric means your shirt will maintain its perfect fit wash after wash. Each shirt is ethically manufactured in fair trade certified facilities, supporting better working conditions and livelihoods for farmers and factory workers.",
+        "price": 19.99,
+        "category": "Fashion",
+        "subcategory": "Clothing",
+        "image": "https://source.unsplash.com/random/300x300/?tshirt",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?tshirt",
+            "https://source.unsplash.com/random/800x600/?tshirt&sig=1",
+            "https://source.unsplash.com/random/800x600/?tshirt&sig=2",
+            "https://source.unsplash.com/random/800x600/?tshirt&sig=3"
+        ],
+        "stock": 150,
+        "rating": 4.2,
+        "reviews": 208,
+        "featured": false,
+        "discount": 0,
+        "new": false,
+        "specs": {
+            "brand": "EcoWear",
+            "material": "100% Organic cotton",
+            "weight": "180 gsm",
+            "sizes": [
+                "S",
+                "M",
+                "L",
+                "XL",
+                "XXL"
+            ],
+            "colors": [
+                "White",
+                "Black",
+                "Navy",
+                "Gray",
+                "Olive",
+                "Burgundy"
+            ],
+            "fit": "Regular fit",
+            "neckline": "Crew neck",
+            "sleeve": "Short sleeve",
+            "care": "Machine wash cold, tumble dry low",
+            "origin": "Fair trade certified",
+            "certification": "GOTS (Global Organic Textile Standard)",
+            "preShrunk": true,
+            "hypoallergenic": true
+        },
+        "createdAt": "2023-02-28T13:20:00.000Z",
+        "updatedAt": "2023-10-26T16:40:00.000Z"
+    },
+    {
+        "id": "9",
+        "name": "Wireless Charging Pad",
+        "description": "Fast-charging wireless pad compatible with all Qi-enabled devices. Sleek design and built-in safety features.",
+        "longDescription": "Say goodbye to tangled cables with our Wireless Charging Pad. This sleek, minimalist charger delivers fast, efficient charging for all Qi-enabled smartphones and earbuds. Supporting up to 15W fast charging, it powers your compatible devices up to 40% faster than standard wireless chargers. The non-slip surface keeps your device securely in place, while the LED indicator subtly shows charging status without being distracting at night. Built with multiple safety features including temperature control, foreign object detection, and short-circuit prevention, you can charge with complete peace of mind. The ultra-thin profile and premium finish make it a stylish addition to any desk, nightstand, or living space.",
+        "price": 29.99,
+        "category": "Electronics",
+        "subcategory": "Accessories",
+        "image": "https://source.unsplash.com/random/300x300/?wireless-charger",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?wireless-charger",
+            "https://source.unsplash.com/random/800x600/?wireless-charger&sig=1",
+            "https://source.unsplash.com/random/800x600/?wireless-charger&sig=2",
+            "https://source.unsplash.com/random/800x600/?wireless-charger&sig=3"
+        ],
+        "stock": 85,
+        "rating": 4.4,
+        "reviews": 176,
+        "featured": false,
+        "discount": 0,
+        "new": true,
+        "specs": {
+            "brand": "PowerTech",
+            "model": "WC-15X",
+            "chargingSpeed": "15W max (device dependent)",
+            "compatibility": "All Qi-enabled devices",
+            "input": "Quick Charge 3.0 / USB-C PD",
+            "dimensions": "4\" diameter x 0.4\" height",
+            "weight": "3.2oz",
+            "color": [
+                "Black",
+                "White",
+                "Navy"
+            ],
+            "cableLengthIncluded": "5ft USB-C to USB-A",
+            "ledIndicator": "Subtle breathing light",
+            "safetyFeatures": [
+                "Temperature control",
+                "Foreign object detection",
+                "Short-circuit protection",
+                "Over-voltage protection"
+            ],
+            "certification": [
+                "Qi-certified",
+                "CE",
+                "FCC",
+                "RoHS"
+            ],
+            "warranty": "18 months"
+        },
+        "createdAt": "2023-07-05T15:10:00.000Z",
+        "updatedAt": "2023-11-02T09:25:00.000Z"
+    },
+    {
+        "id": "10",
+        "name": "Ergonomic Office Chair",
+        "description": "Comfortable office chair with lumbar support, adjustable height, and breathable mesh back. Perfect for long working hours.",
+        "price": 199.99,
+        "category": "Furniture",
+        "subcategory": "Office",
+        "image": "https://source.unsplash.com/random/300x300/?office-chair",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?office-chair",
+            "https://source.unsplash.com/random/800x600/?office-chair&sig=1",
+            "https://source.unsplash.com/random/800x600/?office-chair&sig=2"
+        ],
+        "stock": 20,
+        "rating": 4.7,
+        "reviews": 75,
+        "featured": true,
+        "discount": 10,
+        "new": false,
+        "specs": {
+            "brand": "ComfortPro",
+            "material": "Mesh and fabric",
+            "maxWeight": "300 lbs",
+            "adjustableHeight": true,
+            "armrests": "Padded, adjustable",
+            "assembly": "Required, tools included"
+        },
+        "createdAt": "2023-04-15T10:30:00.000Z",
+        "updatedAt": "2023-10-30T14:45:00.000Z"
+    },
+    {
+        "id": "11",
+        "name": "Natural Scented Candle Set",
+        "description": "Set of 3 handcrafted soy wax candles with essential oils. Long-burning and perfect for creating a relaxing atmosphere.",
+        "price": 34.99,
+        "category": "Home",
+        "subcategory": "Decor",
+        "image": "https://source.unsplash.com/random/300x300/?scented-candles",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?scented-candles",
+            "https://source.unsplash.com/random/800x600/?scented-candles&sig=1",
+            "https://source.unsplash.com/random/800x600/?scented-candles&sig=2"
+        ],
+        "stock": 60,
+        "rating": 4.5,
+        "reviews": 92,
+        "featured": false,
+        "discount": 0,
+        "new": true,
+        "specs": {
+            "brand": "SereneHome",
+            "material": "100% Soy wax",
+            "scents": "Lavender, Vanilla, Eucalyptus",
+            "burnTime": "40 hours each",
+            "container": "Frosted glass",
+            "handmade": true
+        },
+        "createdAt": "2023-05-05T14:00:00.000Z",
+        "updatedAt": "2023-11-01T09:20:00.000Z"
+    },
+    {
+        "id": "12",
+        "name": "Professional Knife Set",
+        "description": "High-quality stainless steel knife set with ergonomic handles. Includes chef's knife, bread knife, paring knife, and more.",
+        "price": 149.99,
+        "category": "Lifestyle",
+        "subcategory": "Kitchen",
+        "image": "https://source.unsplash.com/random/300x300/?knife-set",
+        "images": [
+            "https://source.unsplash.com/random/800x600/?knife-set",
+            "https://source.unsplash.com/random/800x600/?knife-set&sig=1",
+            "https://source.unsplash.com/random/800x600/?knife-set&sig=2"
+        ],
+        "stock": 30,
+        "rating": 4.8,
+        "reviews": 117,
+        "featured": true,
+        "discount": 0,
+        "new": false,
+        "specs": {
+            "brand": "ChefsChoice",
+            "material": "High-carbon stainless steel",
+            "pieces": "7-piece set",
+            "handle": "Pakkawood",
+            "dishwasherSafe": false,
+            "block": "Acacia wood block included"
+        },
+        "createdAt": "2023-02-18T12:15:00.000Z",
+        "updatedAt": "2023-10-27T13:10:00.000Z"
+    }
+]

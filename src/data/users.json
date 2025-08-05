@@ -1,0 +1,86 @@
+[
+    {
+        "id": "1",
+        "name": "Admin User",
+        "email": "admin@example.com",
+        "password": "admin123",
+        "role": "admin",
+        "avatar": "https://randomuser.me/api/portraits/men/41.jpg",
+        "phone": "+1 (555) 123-4567",
+        "address": "123 Admin Street, Admin City, AC 12345",
+        "joinDate": "2022-01-15T08:00:00.000Z",
+        "lastActive": "2023-11-01T15:30:00.000Z"
+    },
+    {
+        "id": "2",
+        "name": "Super Admin",
+        "email": "superadmin@example.com",
+        "password": "super123",
+        "role": "superadmin",
+        "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
+        "phone": "+1 (555) 987-6543",
+        "address": "456 Super Admin Ave, Super City, SC 67890",
+        "joinDate": "2022-01-01T08:00:00.000Z",
+        "lastActive": "2023-11-02T09:45:00.000Z"
+    },
+    {
+        "id": "3",
+        "name": "John Smith",
+        "email": "john@example.com",
+        "password": "password123",
+        "role": "user",
+        "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+        "phone": "+1 (555) 111-2222",
+        "address": "789 Customer Road, Usertown, UT 54321",
+        "joinDate": "2022-03-10T10:15:00.000Z",
+        "lastActive": "2023-10-28T18:20:00.000Z"
+    },
+    {
+        "id": "4",
+        "name": "Sarah Johnson",
+        "email": "sarah@example.com",
+        "password": "password123",
+        "role": "user",
+        "avatar": "https://randomuser.me/api/portraits/women/32.jpg",
+        "phone": "+1 (555) 333-4444",
+        "address": "321 Shopper Lane, Buyville, BV 13579",
+        "joinDate": "2022-04-15T14:30:00.000Z",
+        "lastActive": "2023-10-30T12:10:00.000Z"
+    },
+    {
+        "id": "5",
+        "name": "Michael Wilson",
+        "email": "michael@example.com",
+        "password": "password123",
+        "role": "user",
+        "avatar": "https://randomuser.me/api/portraits/men/55.jpg",
+        "phone": "+1 (555) 555-6666",
+        "address": "654 Consumer Court, Purchaseton, PT 97531",
+        "joinDate": "2022-05-20T09:45:00.000Z",
+        "lastActive": "2023-11-01T08:05:00.000Z"
+    },
+    {
+        "id": "6",
+        "name": "Emily Brown",
+        "email": "emily@example.com",
+        "password": "password123",
+        "role": "user",
+        "avatar": "https://randomuser.me/api/portraits/women/22.jpg",
+        "phone": "+1 (555) 777-8888",
+        "address": "987 Buyer Boulevard, Clientville, CV 24680",
+        "joinDate": "2022-06-05T16:20:00.000Z",
+        "lastActive": "2023-10-25T17:40:00.000Z"
+    },
+    {
+        "id": "7",
+        "name": "James Davis",
+        "email": "james@example.com",
+        "password": "password123",
+        "role": "user",
+        "avatar": "https://randomuser.me/api/portraits/men/67.jpg",
+        "phone": "+1 (555) 999-0000",
+        "address": "135 Retail Road, Shoppingville, SV 86420",
+        "joinDate": "2022-07-12T11:10:00.000Z",
+        "lastActive": "2023-10-29T14:15:00.000Z"
+    }
+]

@@ -1,0 +1,164 @@
+[
+    {
+        "id": 1,
+        "customerId": 4,
+        "customerInfo": {
+            "name": "Alex Johnson",
+            "address": "123 Main St, New York, NY 10001",
+            "email": "alex@example.com",
+            "phone": "555-222-3333",
+            "cardNumber": "**** **** **** 4242"
+        },
+        "cartItems": [
+            {
+                "id": 1,
+                "name": "Modern Laptop Pro",
+                "price": 999.99,
+                "category": "Electronics",
+                "quantity": 1,
+                "adminId": 1
+            },
+            {
+                "id": 3,
+                "name": "Premium Noise-Cancelling Headphones",
+                "price": 199.99,
+                "category": "Electronics",
+                "quantity": 2,
+                "adminId": 2
+            }
+        ],
+        "status": "Delivered",
+        "total": 1399.97,
+        "date": "2023-10-15",
+        "deliveryDate": "2023-10-20",
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "id": 2,
+        "customerId": 5,
+        "customerInfo": {
+            "name": "Maria Garcia",
+            "address": "456 Park Ave, Boston, MA 02115",
+            "email": "maria@example.com",
+            "phone": "555-444-5555",
+            "cardNumber": "**** **** **** 5678"
+        },
+        "cartItems": [
+            {
+                "id": 2,
+                "name": "Classic Stainless Steel Watch",
+                "price": 149.99,
+                "category": "Accessories",
+                "quantity": 1,
+                "adminId": 1
+            },
+            {
+                "id": 4,
+                "name": "Leather Messenger Bag",
+                "price": 89.99,
+                "category": "Accessories",
+                "quantity": 1,
+                "adminId": 2
+            }
+        ],
+        "status": "Delivered",
+        "total": 239.98,
+        "date": "2023-10-18",
+        "deliveryDate": "2023-10-23",
+        "paymentMethod": "PayPal"
+    },
+    {
+        "id": 3,
+        "customerId": 6,
+        "customerInfo": {
+            "name": "David Chen",
+            "address": "789 Oak St, Chicago, IL 60007",
+            "email": "david@example.com",
+            "phone": "555-777-8888",
+            "cardNumber": "**** **** **** 9012"
+        },
+        "cartItems": [
+            {
+                "id": 9,
+                "name": "Professional Digital Camera",
+                "price": 799.99,
+                "category": "Electronics",
+                "quantity": 1,
+                "adminId": 1
+            },
+            {
+                "id": 5,
+                "name": "Smart Bluetooth Speaker",
+                "price": 129.99,
+                "category": "Electronics",
+                "quantity": 1,
+                "adminId": 1
+            }
+        ],
+        "status": "Shipped",
+        "total": 929.98,
+        "date": "2023-11-05",
+        "deliveryDate": null,
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "id": 4,
+        "customerId": 4,
+        "customerInfo": {
+            "name": "Alex Johnson",
+            "address": "123 Main St, New York, NY 10001",
+            "email": "alex@example.com",
+            "phone": "555-222-3333",
+            "cardNumber": "**** **** **** 4242"
+        },
+        "cartItems": [
+            {
+                "id": 12,
+                "name": "Ergonomic Office Chair",
+                "price": 249.99,
+                "category": "Home",
+                "quantity": 1,
+                "adminId": 2
+            }
+        ],
+        "status": "Processing",
+        "total": 249.99,
+        "date": "2023-11-12",
+        "deliveryDate": null,
+        "paymentMethod": "Credit Card"
+    },
+    {
+        "id": 5,
+        "customerId": 5,
+        "customerInfo": {
+            "name": "Maria Garcia",
+            "address": "456 Park Ave, Boston, MA 02115",
+            "email": "maria@example.com",
+            "phone": "555-444-5555",
+            "cardNumber": "**** **** **** 5678"
+        },
+        "cartItems": [
+            {
+                "id": 7,
+                "name": "Slim Fit Men's Dress Shirt",
+                "price": 49.99,
+                "category": "Clothing",
+                "quantity": 2,
+                "adminId": 1
+            },
+            {
+                "id": 8,
+                "name": "Women's Designer Handbag",
+                "price": 149.99,
+                "category": "Accessories",
+                "quantity": 1,
+                "adminId": 2
+            }
+        ],
+        "status": "Processing",
+        "total": 249.97,
+        "date": "2023-11-15",
+        "deliveryDate": null,
+        "paymentMethod": "PayPal"
+    }
+]

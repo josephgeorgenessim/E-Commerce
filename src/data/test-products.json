@@ -1,0 +1,38 @@
+[
+    {
+        "id": "test1",
+        "name": "Test Product 1",
+        "description": "This is a test product",
+        "price": 49.99,
+        "category": "Test",
+        "image": "/placeholder-product-1.png",
+        "stock": 10,
+        "rating": 4.5,
+        "reviews": 10,
+        "featured": true
+    },
+    {
+        "id": "test2",
+        "name": "Test Product 2",
+        "description": "This is another test product",
+        "price": 29.99,
+        "category": "Test",
+        "image": "/placeholder-product-2.png",
+        "stock": 5,
+        "rating": 4.0,
+        "reviews": 5,
+        "featured": true
+    },
+    {
+        "id": "test3",
+        "name": "Test Product 3",
+        "description": "This is a third test product",
+        "price": 39.99,
+        "category": "Test",
+        "image": "/placeholder-product-3.png",
+        "stock": 15,
+        "rating": 3.5,
+        "reviews": 8,
+        "featured": false
+    }
+]

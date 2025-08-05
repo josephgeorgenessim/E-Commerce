@@ -1,0 +1,206 @@
+[
+    {
+        "id": 1,
+        "name": "Electronics",
+        "icon": "devices",
+        "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 101,
+                "name": "Computers",
+                "count": 15
+            },
+            {
+                "id": 102,
+                "name": "Audio",
+                "count": 28
+            },
+            {
+                "id": 103,
+                "name": "Photography",
+                "count": 12
+            },
+            {
+                "id": 104,
+                "name": "Gaming",
+                "count": 20
+            },
+            {
+                "id": 105,
+                "name": "Accessories",
+                "count": 34
+            }
+        ],
+        "featured": true
+    },
+    {
+        "id": 2,
+        "name": "Clothing",
+        "icon": "checkroom",
+        "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 201,
+                "name": "Men",
+                "count": 42
+            },
+            {
+                "id": 202,
+                "name": "Women",
+                "count": 56
+            },
+            {
+                "id": 203,
+                "name": "Kids",
+                "count": 28
+            },
+            {
+                "id": 204,
+                "name": "Shoes",
+                "count": 35
+            },
+            {
+                "id": 205,
+                "name": "Accessories",
+                "count": 21
+            }
+        ],
+        "featured": true
+    },
+    {
+        "id": 3,
+        "name": "Accessories",
+        "icon": "watch",
+        "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 301,
+                "name": "Watches",
+                "count": 18
+            },
+            {
+                "id": 302,
+                "name": "Bags",
+                "count": 24
+            },
+            {
+                "id": 303,
+                "name": "Jewelry",
+                "count": 31
+            },
+            {
+                "id": 304,
+                "name": "Sunglasses",
+                "count": 15
+            },
+            {
+                "id": 305,
+                "name": "Wallets",
+                "count": 12
+            }
+        ],
+        "featured": true
+    },
+    {
+        "id": 4,
+        "name": "Home",
+        "icon": "home",
+        "image": "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 401,
+                "name": "Kitchen",
+                "count": 45
+            },
+            {
+                "id": 402,
+                "name": "Furniture",
+                "count": 38
+            },
+            {
+                "id": 403,
+                "name": "Decor",
+                "count": 52
+            },
+            {
+                "id": 404,
+                "name": "Office",
+                "count": 23
+            },
+            {
+                "id": 405,
+                "name": "Bedding",
+                "count": 19
+            }
+        ],
+        "featured": true
+    },
+    {
+        "id": 5,
+        "name": "Books",
+        "icon": "book",
+        "image": "https://images.unsplash.com/photo-1513001900722-370f803f498d?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 501,
+                "name": "Fiction",
+                "count": 67
+            },
+            {
+                "id": 502,
+                "name": "Non-Fiction",
+                "count": 58
+            },
+            {
+                "id": 503,
+                "name": "Children",
+                "count": 34
+            },
+            {
+                "id": 504,
+                "name": "Educational",
+                "count": 42
+            },
+            {
+                "id": 505,
+                "name": "E-Books",
+                "count": 95
+            }
+        ],
+        "featured": false
+    },
+    {
+        "id": 6,
+        "name": "Sports",
+        "icon": "sports_soccer",
+        "image": "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=500",
+        "subcategories": [
+            {
+                "id": 601,
+                "name": "Fitness",
+                "count": 37
+            },
+            {
+                "id": 602,
+                "name": "Outdoor",
+                "count": 29
+            },
+            {
+                "id": 603,
+                "name": "Team Sports",
+                "count": 24
+            },
+            {
+                "id": 604,
+                "name": "Equipment",
+                "count": 43
+            },
+            {
+                "id": 605,
+                "name": "Clothing",
+                "count": 31
+            }
+        ],
+        "featured": false
+    }
+]

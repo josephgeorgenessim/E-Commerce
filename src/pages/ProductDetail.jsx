@@ -1,319 +1,383 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  ShoppingBag, 
+  Truck, 
+  ShieldCheck, 
+  RotateCcw, 
+  Star, 
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Minus,
+  Check,
+  Share2
+} from 'lucide-react';
 import { getProductById, getRelatedProducts } from '../data/productsData';
 import { addItem } from '../features/cart/cartSlice';
-import {
-  Container, Grid, Box, Typography, Button, Rating, Divider,
-  Card, CardContent, Chip, CircularProgress, Tabs, Tab
-} from '@mui/material';
-import {
-  AddShoppingCart as CartIcon,
-  LocalShipping as ShippingIcon,
-  Security as SecurityIcon,
-  AssignmentReturn as ReturnIcon
-} from '@mui/icons-material';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { toast } from 'sonner';
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tabValue, setTabValue] = React.useState(0);
+  const [activeTab, setActiveTab] = useState('specs');
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     if (id) {
+      window.scrollTo(0, 0);
       setLoading(true);
-      // Get product directly from data module
       const foundProduct = getProductById(id);
       setProduct(foundProduct);
-
       if (foundProduct) {
-        // Get related products
         setRelatedProducts(getRelatedProducts(id));
       }
-
       setLoading(false);
     }
   }, [id]);
 
   const handleAddToCart = () => {
+    if (!product) return;
     dispatch(addItem({
       id: product.id,
       price: product.price,
       name: product.name,
       image: product.image,
-      quantity: 1
+      quantity: quantity
     }));
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
+    toast.success(`${product.name} added to cart!`, {
+      description: `${quantity} unit${quantity > 1 ? 's' : ''} added successfully.`
+    });
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-        <CircularProgress />
-      </Box>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="relative w-20 h-20">
+          <div className="absolute inset-0 border-4 border-primary/20 rounded-full" />
+          <div className="absolute inset-0 border-4 border-primary rounded-full border-t-transparent animate-spin" />
+        </div>
+      </div>
     );
   }
 
   if (!product) {
     return (
-      <Container sx={{ py: 8 }}>
-        <Typography variant="h5" align="center">
-          Product not found
-        </Typography>
-      </Container>
+      <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-6">
+        <div className="p-6 rounded-full bg-muted">
+          <ShoppingBag className="h-12 w-12 text-muted-foreground" />
+        </div>
+        <h2 className="text-3xl font-bold">Product not found</h2>
+        <Button onClick={() => navigate('/products')} className="rounded-xl">
+          Back to Catalog
+        </Button>
+      </div>
     );
   }
 
+  const allImages = [product.image, ...(product.images || [])];
+
   return (
-    <Container sx={{ py: 4 }}>
-      <Grid container spacing={4}>
-        {/* Product Images */}
-        <Grid item xs={12} md={6}>
-          <Box
-            component="img"
-            src={product.image}
-            alt={product.name}
-            sx={{
-              width: '100%',
-              borderRadius: 2,
-              boxShadow: 1,
-              mb: 2
-            }}
-          />
-          <Grid container spacing={2}>
-            {product.images && product.images.slice(0, 3).map((image, index) => (
-              <Grid item xs={4} key={index}>
-                <Box
-                  component="img"
-                  src={image}
-                  alt={`${product.name} view ${index + 1}`}
-                  sx={{
-                    width: '100%',
-                    height: 80,
-                    objectFit: 'cover',
-                    borderRadius: 1,
-                    cursor: 'pointer',
-                    border: '1px solid',
-                    borderColor: 'divider'
-                  }}
+    <div className="container mx-auto px-4 py-12 lg:py-20 overflow-x-hidden">
+      {/* Breadcrumbs / Back button */}
+      <button 
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12 group"
+      >
+        <ChevronLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+        <span className="text-sm font-medium">Back to collection</span>
+      </button>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        {/* Product Images Gallery */}
+        <div className="space-y-6">
+          <motion.div 
+            layoutId={`product-image-${product.id}`}
+            className="relative aspect-square rounded-[3rem] overflow-hidden bg-muted glass border border-white/20 shadow-2xl"
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={selectedImage}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.5 }}
+                src={allImages[selectedImage]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            </AnimatePresence>
+            
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 px-4 py-2 glass rounded-full border border-white/30">
+              {allImages.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(idx)}
+                  className={`h-2 transition-all rounded-full ${
+                    selectedImage === idx ? 'w-8 bg-primary' : 'w-2 bg-primary/20 hover:bg-primary/40'
+                  }`}
                 />
-              </Grid>
+              ))}
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-4 gap-4">
+            {allImages.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedImage(idx)}
+                className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
+                  selectedImage === idx ? 'border-primary ring-4 ring-primary/10' : 'border-transparent opacity-60 hover:opacity-100'
+                }`}
+              >
+                <img src={img} alt="" className="w-full h-full object-cover" />
+              </button>
             ))}
-          </Grid>
-        </Grid>
+          </div>
+        </div>
 
-        {/* Product Details */}
-        <Grid item xs={12} md={6}>
-          <Box>
-            <Typography variant="overline" color="text.secondary">
-              {product.category} / {product.subcategory}
-            </Typography>
-            <Typography variant="h4" component="h1" gutterBottom>
+        {/* Product Info Sidebar */}
+        <div className="flex flex-col space-y-10">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <Badge variant="outline" className="px-3 py-1 border-primary/20 text-primary bg-primary/5 uppercase tracking-widest text-[10px]">
+                {product.category}
+              </Badge>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 glass">
+                  <Heart className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 glass">
+                  <Share2 className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+
+            <h1 className="text-4xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
               {product.name}
-            </Typography>
+            </h1>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Rating value={product.rating} precision={0.5} readOnly />
-              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                {product.rating} ({product.reviews} reviews)
-              </Typography>
-            </Box>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`h-5 w-5 ${i < Math.floor(product.rating) ? 'fill-orange-400 text-orange-400' : 'text-muted'}`} 
+                  />
+                ))}
+                <span className="ml-2 text-sm font-bold">{product.rating}</span>
+                <span className="text-sm text-muted-foreground ml-1">({product.reviews} reviews)</span>
+              </div>
+              <div className="h-4 w-[1px] bg-border" />
+              <div className="flex items-center gap-2 text-sm font-medium text-green-500">
+                <Check className="h-4 w-4" />
+                In Stock
+              </div>
+            </div>
 
-            <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-              ${product.price.toFixed(2)}
+            <div className="flex items-baseline gap-4">
+              <span className="text-4xl font-bold text-gradient">${product.price.toFixed(2)}</span>
               {product.discount > 0 && (
-                <Typography
-                  component="span"
-                  sx={{
-                    textDecoration: 'line-through',
-                    color: 'text.secondary',
-                    ml: 2,
-                    fontSize: '1rem'
-                  }}
-                >
+                <span className="text-xl text-muted-foreground line-through opacity-50">
                   ${(product.price * (1 + product.discount / 100)).toFixed(2)}
-                </Typography>
+                </span>
               )}
-            </Typography>
+            </div>
 
-            <Typography variant="body1" paragraph>
+            <p className="text-lg text-muted-foreground leading-relaxed">
               {product.description}
-            </Typography>
+            </p>
+          </div>
 
-            <Box sx={{ mb: 3 }}>
-              {product.new && (
-                <Chip label="NEW" color="primary" size="small" sx={{ mr: 1 }} />
-              )}
-              {product.discount > 0 && (
-                <Chip label={`${product.discount}% OFF`} color="secondary" size="small" sx={{ mr: 1 }} />
-              )}
-              {product.stock < 10 && (
-                <Chip label="Low Stock" color="error" size="small" />
-              )}
-            </Box>
+          <div className="p-8 rounded-[2.5rem] glass border border-white/20 shadow-xl space-y-8">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Quantity</p>
+                <div className="flex items-center gap-4 bg-background/50 rounded-2xl p-1 w-fit border border-border">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="rounded-xl h-10 w-10"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                  <span className="w-8 text-center font-bold text-lg">{quantity}</span>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="rounded-xl h-10 w-10"
+                    onClick={() => setQuantity(quantity + 1)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="text-right">
+                <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-1">Subtotal</p>
+                <p className="text-3xl font-bold">${(product.price * quantity).toFixed(2)}</p>
+              </div>
+            </div>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Availability: <span style={{ fontWeight: 'normal' }}>{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
-              </Typography>
-              <Typography variant="subtitle2">
-                SKU: <span style={{ fontWeight: 'normal' }}>PROD-{product.id}</span>
-              </Typography>
-            </Box>
-
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<CartIcon />}
-              size="large"
-              fullWidth
-              disabled={product.stock === 0}
+            <Button 
+              size="lg" 
+              className="w-full h-16 rounded-[1.25rem] text-lg font-bold bg-primary hover:bg-primary/9 shadow-xl shadow-primary/20 group"
               onClick={handleAddToCart}
-              sx={{ mb: 2 }}
             >
-              Add to Cart
+              <ShoppingBag className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
+              Add to Bag
             </Button>
 
-            <Divider sx={{ my: 3 }} />
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 text-center">
+              <div className="space-y-2">
+                <Truck className="h-6 w-6 mx-auto text-primary" />
+                <p className="text-[10px] uppercase font-bold tracking-widest">Free Delivery</p>
+              </div>
+              <div className="space-y-2">
+                <RotateCcw className="h-6 w-6 mx-auto text-primary" />
+                <p className="text-[10px] uppercase font-bold tracking-widest">30 Days Return</p>
+              </div>
+              <div className="space-y-2">
+                <ShieldCheck className="h-6 w-6 mx-auto text-primary" />
+                <p className="text-[10px] uppercase font-bold tracking-widest">2 Year Warranty</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <Box sx={{ textAlign: 'center' }}>
-                  <ShippingIcon color="primary" sx={{ fontSize: 32, mb: 1 }} />
-                  <Typography variant="body2">Free Shipping</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box sx={{ textAlign: 'center' }}>
-                  <SecurityIcon color="primary" sx={{ fontSize: 32, mb: 1 }} />
-                  <Typography variant="body2">Secure Payment</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box sx={{ textAlign: 'center' }}>
-                  <ReturnIcon color="primary" sx={{ fontSize: 32, mb: 1 }} />
-                  <Typography variant="body2">Easy Returns</Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
+      {/* Extended Info Tabs */}
+      <div className="mt-24 lg:mt-32">
+        <div className="flex gap-12 border-b border-border mb-12">
+          {['specs', 'description', 'reviews'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-4 text-sm font-bold uppercase tracking-[0.2em] transition-all relative ${
+                activeTab === tab ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {tab}
+              {activeTab === tab && (
+                <motion.div 
+                  layoutId="activeTab" 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full shadow-lg shadow-primary/30" 
+                />
+              )}
+            </button>
+          ))}
+        </div>
 
-      {/* Product Information Tabs */}
-      <Box sx={{ mt: 6 }}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
-        >
-          <Tab label="Specifications" />
-          <Tab label="Description" />
-          <Tab label="Shipping" />
-        </Tabs>
+        <div className="min-h-[300px]">
+          <AnimatePresence mode="wait">
+            {activeTab === 'specs' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-6"
+              >
+                {product.specs && Object.entries(product.specs).map(([key, value]) => (
+                  <div key={key} className="flex justify-between py-4 border-b border-border/50 group">
+                    <span className="text-muted-foreground capitalize group-hover:text-foreground transition-colors">
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </span>
+                    <span className="font-bold text-right">
+                      {Array.isArray(value) ? value.join(', ') : value.toString()}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            )}
 
-        <Box sx={{ py: 3 }}>
-          {tabValue === 0 && (
-            <Card sx={{ p: 2 }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>Product Specifications</Typography>
-                <Grid container spacing={2}>
-                  {product.specs && Object.entries(product.specs).map(([key, value]) => (
-                    <Grid item xs={12} sm={6} key={key}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 1, borderBottom: '1px dashed', borderColor: 'divider' }}>
-                        <Typography variant="body2" sx={{ textTransform: 'capitalize' }}>
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                          {Array.isArray(value) ? value.join(', ') : value.toString()}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </CardContent>
-            </Card>
-          )}
+            {activeTab === 'description' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="max-w-3xl prose prose-slate dark:prose-invert"
+              >
+                <h3 className="text-2xl font-bold mb-6">Designed for Perfection</h3>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {product.longDescription || product.description}
+                </p>
+                <p className="text-lg text-muted-foreground mt-6 italic">
+                  Crafted with premium materials and engineered for durability. Every detail is meticulously thought out to provide you with the best experience possible.
+                </p>
+              </motion.div>
+            )}
 
-          {tabValue === 1 && (
-            <Box>
-              <Typography variant="h6" gutterBottom>Detailed Description</Typography>
-              <Typography variant="body1" paragraph>
-                {product.longDescription || product.description}
-              </Typography>
-            </Box>
-          )}
+            {activeTab === 'reviews' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col items-center justify-center py-20 bg-muted/30 rounded-[3rem] border border-dashed border-border"
+              >
+                <Star className="h-10 w-10 text-muted-foreground mb-4" />
+                <h3 className="text-xl font-bold">Review System Coming Soon</h3>
+                <p className="text-muted-foreground">We're currently refactoring our community feedback section.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
 
-          {tabValue === 2 && (
-            <Box>
-              <Typography variant="h6" gutterBottom>Shipping Information</Typography>
-              <Typography variant="body1" paragraph>
-                Free standard shipping on orders over $50.
-              </Typography>
-              <Typography variant="body1" paragraph>
-                Estimated delivery time: 3-5 business days.
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Please note that delivery times may vary based on your location.
-              </Typography>
-            </Box>
-          )}
-        </Box>
-      </Box>
-
-      {/* Related Products Section */}
+      {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <Box sx={{ mt: 8 }}>
-          <Typography variant="h5" gutterBottom>
-            Related Products
-          </Typography>
-          <Grid container spacing={3}>
-            {relatedProducts.map((relatedProduct) => (
-              <Grid item xs={12} sm={6} md={3} key={relatedProduct.id}>
-                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <Box
-                    component="img"
-                    src={relatedProduct.image}
-                    alt={relatedProduct.name}
-                    sx={{ height: 140, objectFit: 'cover' }}
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h6" component="h2" noWrap>
-                      {relatedProduct.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {relatedProduct.description}
-                    </Typography>
-                    <Typography variant="h6" color="primary" sx={{ mt: 1 }}>
-                      ${relatedProduct.price.toFixed(2)}
-                    </Typography>
-                  </CardContent>
-                  <Box sx={{ p: 2, pt: 0 }}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      onClick={() => window.location.href = `/products/${relatedProduct.id}`}
-                    >
-                      View Details
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
+        <section className="mt-32">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-3xl font-bold tracking-tight">You might also like</h2>
+            <Button variant="ghost" className="rounded-xl group" onClick={() => navigate('/products')}>
+              View All <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {relatedProducts.map((p, idx) => (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ y: -10 }}
+                onClick={() => navigate(`/products/${p.id}`)}
+                className="group p-4 bg-card rounded-[2rem] border border-border hover:shadow-2xl hover:shadow-primary/10 transition-all cursor-pointer"
+              >
+                <div className="aspect-square rounded-2xl overflow-hidden mb-6">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" />
+                </div>
+                <div className="px-2 space-y-2">
+                  <h3 className="font-bold group-hover:text-primary transition-colors line-clamp-1">{p.name}</h3>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-lg">${p.price.toFixed(2)}</span>
+                    <div className="flex items-center gap-1 scale-75 origin-right">
+                      <Star className="h-3 w-3 fill-orange-400 text-orange-400" />
+                      <span className="text-xs font-bold">{p.rating}</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             ))}
-          </Grid>
-        </Box>
+          </div>
+        </section>
       )}
-    </Container>
+    </div>
   );
 };
 
-export default ProductDetail; 
+export default ProductDetail;
+ 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ChevronDown } from 'lucide-react';
 import { selectOrdersByAdminId } from '../../features/orders/ordersSlice';
 import { selectCurrentUser } from '../../features/users/usersSlice';
 import { Card, CardContent } from '../ui/card';

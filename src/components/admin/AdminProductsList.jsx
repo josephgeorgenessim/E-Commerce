@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Pencil, Trash2 } from 'lucide-react';
 import { selectCurrentUser } from '../../features/users/usersSlice';
-import { getAllProducts, getProductsByAdminId } from '../../data/productsData';
+import { getProductsByAdminId } from '../../data/productsData';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import {
@@ -16,7 +16,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "../ui/dialog";
 import {
     Select,

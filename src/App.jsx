@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from './store';
-import { selectCurrentUser, selectIsAuthenticated } from './features/users/usersSlice';
+import { selectCurrentUser } from './features/users/usersSlice';
 import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
 import Cart from './components/guest/Cart';
 import RoleGuard from './components/auth/RoleGuard';
-import { toggleCart, selectCartItems } from './features/cart/cartSlice';
-import './App.css';
+import { Toaster } from 'sonner';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Direct imports - no lazy loading
-// Store components
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
 import CategoryPage from './pages/CategoryPage';
-import ProductList from './components/guest/ProductList';
-import DirectProducts from './components/guest/DirectProducts';
+import ProductsPage from './pages/ProductsPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import WishlistPage from './pages/WishlistPage';
@@ -34,23 +33,26 @@ import AdminProductsList from './components/admin/AdminProductsList';
 import AdminOrdersList from './components/admin/AdminOrdersList';
 import AdminSettings from './components/admin/AdminSettings';
 
+const PageWrapper = ({ children }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.3, ease: "easeOut" }}
+  >
+    {children}
+  </motion.div>
+);
+
 function App() {
-  const dispatch = useDispatch();
   const location = useLocation();
-  const cartItems = useSelector(selectCartItems);
   const currentUser = useSelector(selectCurrentUser);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Role-based route redirections - add null checks
   const userRole = currentUser?.role || 'guest';
   const isAdmin = userRole === 'admin';
   const isSuperAdmin = userRole === 'superadmin';
-  const isGuest = userRole === 'guest' || !userRole;
-  const isUser = userRole === 'user';
   const isAdminUser = isAdmin || isSuperAdmin;
-
-  // Removed automatic redirects to allow all users to access the home page
 
   const handleCartClick = () => {
     setIsCartOpen(true);
@@ -62,17 +64,16 @@ function App() {
 
   const handleCheckout = () => {
     setIsCartOpen(false);
-    // navigate('/checkout');
-    window.location.href = '/checkout';
   };
 
-  // Hide Navbar on admin routes
-  const showNavbar = !location.pathname.startsWith('/admin');
+  const showNavbarFooter = !location.pathname.startsWith('/admin');
 
   return (
     <PersistGate loading={null} persistor={persistor}>
-      <div className="App">
-        {showNavbar && <Navbar onCartClick={handleCartClick} />}
+      <div className="App min-h-screen bg-background text-foreground font-sans flex flex-col">
+        <Toaster position="top-right" richColors closeButton />
+        
+        {showNavbarFooter && <Navbar onCartClick={handleCartClick} />}
 
         {!isAdminUser && (
           <Cart
@@ -82,49 +83,54 @@ function App() {
           />
         )}
 
-        <Routes>
-          {/* Public Routes - Accessible to all users */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+        <main className="flex-1">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              {/* Public Routes */}
+              <Route path="/login" element={<PageWrapper><LoginPage /></PageWrapper>} />
+              <Route path="/register" element={<PageWrapper><RegisterPage /></PageWrapper>} />
 
-          {/* Public Store Routes - Accessible to all users */}
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/direct-products" element={<DirectProducts />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/category/:category" element={<CategoryPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+              {/* Public Store Routes */}
+              <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+              <Route path="/products" element={<PageWrapper><ProductsPage /></PageWrapper>} />
+              <Route path="/products/:id" element={<PageWrapper><ProductDetail /></PageWrapper>} />
+              <Route path="/category/:category" element={<PageWrapper><CategoryPage /></PageWrapper>} />
+              <Route path="/about" element={<PageWrapper><AboutPage /></PageWrapper>} />
+              <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+              <Route path="/wishlist" element={<PageWrapper><WishlistPage /></PageWrapper>} />
+              <Route path="/checkout" element={<PageWrapper><CheckoutPage /></PageWrapper>} />
 
-          {/* User-Only Routes - Not accessible to guests or admins */}
-          <Route element={
-            <RoleGuard
-              allowedRoles={['user']}
-              redirectPath={"/login"}
-            />
-          }>
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/orders" element={<NotFoundPage />} />
-          </Route>
+              {/* User-Only Routes */}
+              <Route element={
+                <RoleGuard
+                  allowedRoles={['user']}
+                  redirectPath={"/login"}
+                />
+              }>
+                <Route path="/profile" element={<PageWrapper><ProfilePage /></PageWrapper>} />
+                <Route path="/orders" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+              </Route>
 
-          {/* Admin Routes - Only accessible to admin and superadmin */}
-          <Route element={
-            <RoleGuard
-              allowedRoles={['admin', 'superadmin']}
-              redirectPath="/"
-            />
-          }>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/products" element={<AdminProductsList />} />
-            <Route path="/admin/orders" element={<AdminOrdersList />} />
-            <Route path="/admin/settings" element={<AdminSettings />} />
-          </Route>
+              {/* Admin Routes */}
+              <Route element={
+                <RoleGuard
+                  allowedRoles={['admin', 'superadmin']}
+                  redirectPath="/"
+                />
+              }>
+                <Route path="/admin/dashboard" element={<PageWrapper><AdminDashboard /></PageWrapper>} />
+                <Route path="/admin/products" element={<PageWrapper><AdminProductsList /></PageWrapper>} />
+                <Route path="/admin/orders" element={<PageWrapper><AdminOrdersList /></PageWrapper>} />
+                <Route path="/admin/settings" element={<PageWrapper><AdminSettings /></PageWrapper>} />
+              </Route>
 
-          {/* 404 Fallback */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+              {/* 404 Fallback */}
+              <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+            </Routes>
+          </AnimatePresence>
+        </main>
+
+        {showNavbarFooter && <Footer />}
       </div>
     </PersistGate>
   );

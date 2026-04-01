@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { selectCurrentUser, login } from '../features/users/usersSlice';
-import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  ArrowRight, 
+  LogIn, 
+  AlertCircle,
+  KeyRound
+} from 'lucide-react';
+import { selectCurrentUser, login, selectUserLoading, selectUserError } from '../features/users/usersSlice';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { toast } from 'sonner';
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
@@ -13,197 +23,197 @@ const LoginPage = () => {
         password: ''
     });
     const [showPassword, setShowPassword] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [showError, setShowError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [localError, setLocalError] = useState(null);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+    
     const currentUser = useSelector(selectCurrentUser);
+    const isLoading = useSelector(selectUserLoading);
+    const apiError = useSelector(selectUserError);
+    
     const from = location.state?.from || '/';
     
-    // If user is already logged in, redirect to appropriate page
     useEffect(() => {
         if (currentUser && currentUser.role !== 'guest') {
-            if (currentUser.role === 'admin') {
-                navigate('/admin/dashboard');
-            } else if (currentUser.role === 'superadmin') {
-                navigate('/superadmin');
-            } else {
-                navigate('/');
-            }
+            const redirectPath = currentUser.role.includes('admin') ? '/admin/dashboard' : from;
+            navigate(redirectPath, { replace: true });
         }
-    }, [currentUser, navigate]);
+    }, [currentUser, navigate, from]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-        // Clear error when user types
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: null
-            });
-        }
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (localError) setLocalError(null);
     };
 
-    const validateForm = () => {
-        const newErrors = {};
-
-        if (!formData.email) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid';
-        }
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.email || !formData.password) {
+            setLocalError('Please fill in all fields');
+            return;
+        }
 
-        if (validateForm()) {
-            // Hardcoded credentials for demo purposes
-            if (
-                (formData.email === 'admin@example.com' && formData.password === 'admin123') ||
-                (formData.email === 'superadmin@example.com' && formData.password === 'super123')
-            ) {
-                const role = formData.email === 'superadmin@example.com' ? 'superadmin' : 'admin';
-                const userData = {
-                    id: role === 'superadmin' ? '2' : '1',
+        try {
+            // Hardcoded credentials for demo purposes based on previous implementation
+            let userData = null;
+            if (formData.email === 'admin@example.com' && formData.password === 'admin123') {
+                userData = {
+                    id: '1',
                     email: formData.email,
-                    name: role === 'superadmin' ? 'Super Admin' : 'Admin User',
-                    role: role,
-                    avatar: `https://randomuser.me/api/portraits/${role === 'superadmin' ? 'women' : 'men'}/1.jpg`
+                    name: 'Admin User',
+                    role: 'admin',
+                    avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
                 };
-
-                dispatch(login(userData));
-
-                // Redirect to the appropriate dashboard based on role
-                if (role === 'superadmin') {
-                    navigate('/superadmin');
-                } else if (role === 'admin') {
-                    navigate('/admin/dashboard');
-                } else {
-                    navigate(from);
-                }
+            } else if (formData.email === 'superadmin@example.com' && formData.password === 'super123') {
+                userData = {
+                    id: '2',
+                    email: formData.email,
+                    name: 'Super Admin',
+                    role: 'superadmin',
+                    avatar: 'https://randomuser.me/api/portraits/women/1.jpg'
+                };
             } else {
-                // Mock API error
-                setErrorMessage('Invalid email or password');
-                setShowError(true);
+                // Regular user simulation
+                userData = {
+                    id: '100',
+                    email: formData.email,
+                    name: formData.email.split('@')[0],
+                    role: 'user',
+                    avatar: `https://ui-avatars.com/api/?name=${formData.email}`
+                };
             }
+
+            await dispatch(login(userData));
+            toast.success(`Welcome back, ${userData.name}!`);
+        } catch (err) {
+            toast.error('Login failed. Please check your credentials.');
         }
     };
 
     return (
-        <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
-            <Card className="w-full max-w-md">
-                <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-                    <CardDescription>
-                        Sign in to continue to your account
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {showError && (
-                        <div className="bg-destructive/15 text-destructive px-4 py-3 rounded-md flex items-center mb-4">
-                            <AlertCircle className="h-4 w-4 mr-2" />
-                            {errorMessage}
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden">
+            {/* Background Decorations */}
+            <div className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-br from-secondary/5 via-background to-primary/5" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="w-full max-w-md"
+            >
+                <div className="glass p-8 md:p-12 rounded-[3.5rem] border border-white/20 shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 left-0 p-8 opacity-5">
+                      <LogIn className="h-40 w-40" />
+                    </div>
+
+                    <div className="space-y-8 relative z-10">
+                        <div className="text-center space-y-4">
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: 'spring', damping: 10, delay: 0.2 }}
+                                className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-6"
+                            >
+                                <Lock className="h-8 w-8 text-white" />
+                            </motion.div>
+                            <h1 className="text-4xl font-bold tracking-tight">Login</h1>
+                            <p className="text-muted-foreground">Access your premium account</p>
                         </div>
-                    )}
-                
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <Mail className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <Input
-                                    className={`pl-10 ${errors.email ? 'border-destructive' : ''}`}
-                                    placeholder="Email Address"
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            {errors.email && (
-                                <p className="text-sm text-destructive">{errors.email}</p>
-                            )}
-                        </div>
-                        
-                        <div className="space-y-2">
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <Lock className="h-4 w-4 text-muted-foreground" />
-                                </div>
-                                <Input
-                                    className={`pl-10 ${errors.password ? 'border-destructive' : ''}`}
-                                    placeholder="Password"
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                />
-                                <div 
-                                    className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                                    onClick={() => setShowPassword(!showPassword)}
+
+                        <AnimatePresence mode="wait">
+                            {(localError || apiError) && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="bg-destructive/10 text-destructive text-sm font-bold p-4 rounded-xl flex items-center gap-3 border border-destructive/20"
                                 >
-                                    {showPassword ? (
-                                        <EyeOff className="h-4 w-4 text-muted-foreground" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-muted-foreground" />
-                                    )}
+                                    <AlertCircle className="h-4 w-4" />
+                                    {localError || apiError}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-widest ml-1 text-muted-foreground">Email Address</label>
+                                <div className="relative group">
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Input 
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="your@email.com"
+                                        className="h-14 pl-12 glass rounded-2xl border-none focus-visible:ring-primary/20"
+                                    />
                                 </div>
                             </div>
-                            {errors.password && (
-                                <p className="text-sm text-destructive">{errors.password}</p>
-                            )}
-                        </div>
-                        
-                        <div className="text-right">
-                            <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-                                Forgot password?
-                            </Link>
-                        </div>
-                        
-                        <Button type="submit" className="w-full">
-                            Sign In
-                        </Button>
-                    </form>
-                    
-                    <div className="relative my-6">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-muted"></div>
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-background px-2 text-muted-foreground">Or</span>
+
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between ml-1">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Password</label>
+                                    <Link to="/forgot-password" size="sm" className="text-[10px] font-bold uppercase tracking-wider text-primary hover:underline">
+                                        Forgot?
+                                    </Link>
+                                </div>
+                                <div className="relative group">
+                                    <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                                    <Input 
+                                        name="password"
+                                        type={showPassword ? "text" : "password"}
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        placeholder="••••••••"
+                                        className="h-14 pl-12 glass rounded-2xl border-none focus-visible:ring-primary/20"
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                                    >
+                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <Button 
+                                type="submit" 
+                                disabled={isLoading}
+                                className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/9 shadow-xl shadow-primary/20 text-lg font-bold group"
+                            >
+                                {isLoading ? (
+                                    <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                ) : (
+                                    <>
+                                        Sign In
+                                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+
+                        <div className="pt-8 text-center border-t border-white/10 space-y-4">
+                            <p className="text-sm text-muted-foreground">
+                                Don't have an account yet?
+                            </p>
+                            <Button 
+                                variant="outline" 
+                                className="w-full h-14 rounded-2xl border-primary/20 hover:bg-primary/5 hover:text-primary glass font-bold"
+                                onClick={() => navigate('/register')}
+                            >
+                                Create Premium Account
+                            </Button>
                         </div>
                     </div>
-                    
-                    
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                    <p className="text-sm text-center text-muted-foreground">
-                        Don't have an account?{" "}
-                        <Link to="/register" className="text-primary hover:underline">
-                            Sign up
-                        </Link>
-                    </p>
-                </CardFooter>
-            </Card>
+                </div>
+            </motion.div>
         </div>
     );
 };
 
-export default LoginPage; 
+export default LoginPage;
+ 

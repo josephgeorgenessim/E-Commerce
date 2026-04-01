@@ -1,25 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, Filler } from 'chart.js';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { motion } from 'framer-motion';
+import { 
+    Chart as ChartJS, 
+    ArcElement, 
+    Tooltip, 
+    Legend, 
+    CategoryScale, 
+    LinearScale, 
+    BarElement, 
+    Title, 
+    PointElement, 
+    LineElement, 
+    Filler 
+} from 'chart.js';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { selectCurrentUser } from '../../features/users/usersSlice';
 import { selectOrdersByAdminId } from '../../features/orders/ordersSlice';
-import { getProductsByAdminId } from '../../data/productsData';
 import { Badge } from '../ui/badge';
 import {
-    TrendingUp,
-    TrendingDown,
     ShoppingBag,
     Users,
     DollarSign,
     Package,
-    Activity,
     Calendar,
     ArrowUpRight,
-    ArrowDownRight
+    ArrowDownRight,
+    MousePointer2,
+    Clock,
+    AlertCircle,
+    Info,
+    Settings as SettingsIcon
 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
 
 // Register ChartJS components
 ChartJS.register(
@@ -38,456 +52,326 @@ ChartJS.register(
 const DashboardAnalysis = () => {
     const currentUser = useSelector(selectCurrentUser);
     const orders = useSelector(state => selectOrdersByAdminId(state, currentUser?.id));
-    const [products, setProducts] = useState([]);
 
-    // Load products for the current admin
-    useEffect(() => {
-        if (currentUser && currentUser.id) {
-            try {
-                const adminProducts = getProductsByAdminId(currentUser.id);
-                setProducts(adminProducts || []);
-            } catch (error) {
-                console.error('Error loading admin products:', error);
-                setProducts([]);
-            }
-        }
-    }, [currentUser]);
-
-    // Calculate metrics
+    // Metrics Calculation
     const totalRevenue = orders.reduce((sum, order) => {
         if (!order.cartItems) return sum;
-        const adminItems = order.cartItems.filter(item =>
-            item.adminId === currentUser?.id ||
-            item.adminId === parseInt(currentUser?.id)
+        const adminItems = order.cartItems.filter(item => 
+            String(item.adminId) === String(currentUser?.id)
         );
         return sum + adminItems.reduce((itemSum, item) => itemSum + (item.price * item.quantity), 0);
     }, 0);
 
     const totalItemsSold = orders.reduce((sum, order) => {
         if (!order.cartItems) return sum;
-        const adminItems = order.cartItems.filter(item =>
-            item.adminId === currentUser?.id ||
-            item.adminId === parseInt(currentUser?.id)
+        const adminItems = order.cartItems.filter(item => 
+            String(item.adminId) === String(currentUser?.id)
         );
         return sum + adminItems.reduce((itemSum, item) => itemSum + item.quantity, 0);
     }, 0);
 
-    // Group by category for product distribution
-    const categoryCount = products.reduce((acc, product) => {
-        acc[product.category] = (acc[product.category] || 0) + 1;
-        return acc;
-    }, {});
 
-    // Group by month for revenue trend
-    const monthlyRevenue = orders.reduce((acc, order) => {
-        if (!order.cartItems) return acc;
-        const date = new Date(order.date);
-        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
-
-        const adminItems = order.cartItems.filter(item =>
-            item.adminId === currentUser?.id ||
-            item.adminId === parseInt(currentUser?.id)
-        );
-        const orderTotal = adminItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-        acc[monthYear] = (acc[monthYear] || 0) + orderTotal;
-        return acc;
-    }, {});
-
-    // Order status distribution
-    const orderStatusCount = orders.reduce((acc, order) => {
-        acc[order.status] = (acc[order.status] || 0) + 1;
-        return acc;
-    }, {});
-
-    // Weekly sales data (simulated)
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const weeklySales = days.map(() => Math.floor(Math.random() * 5000) + 1000);
-
-    // Recent activities (simulated)
-    const recentActivities = [
-        {
-            type: 'order',
-            message: 'New order received',
-            time: '2 minutes ago',
-            amount: '$125.50',
-            status: 'success'
-        },
-        {
-            type: 'product',
-            message: 'Product stock low',
-            time: '1 hour ago',
-            product: 'Wireless Headphones',
-            status: 'warning'
-        },
-        {
-            type: 'revenue',
-            message: 'Daily revenue report',
-            time: '3 hours ago',
-            amount: '$1,245.80',
-            status: 'success'
-        },
-        {
-            type: 'customer',
-            message: 'New customer registered',
-            time: '5 hours ago',
-            customer: 'John Smith',
-            status: 'info'
-        },
-        {
-            type: 'order',
-            message: 'Order was canceled',
-            time: '6 hours ago',
-            amount: '$49.99',
-            status: 'error'
+    // Animation Config
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
         }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.19, 1, 0.22, 1] } }
+    };
+
+    const stats = [
+        { 
+            label: 'Total Revenue', 
+            value: `$${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
+            icon: DollarSign, 
+            trend: '+12.5%', 
+            trendUp: true, 
+            color: 'bg-emerald-500', 
+            chartColor: '#10b981' 
+        },
+        { 
+            label: 'Total Orders', 
+            value: orders.length, 
+            icon: ShoppingBag, 
+            trend: '+8.2%', 
+            trendUp: true, 
+            color: 'bg-blue-500', 
+            chartColor: '#3b82f6' 
+        },
+        { 
+            label: 'Items Sold', 
+            value: totalItemsSold, 
+            icon: Package, 
+            trend: '-2.4%', 
+            trendUp: false, 
+            color: 'bg-purple-500', 
+            chartColor: '#a855f7' 
+        },
+        { 
+            label: 'Store Visitors', 
+            value: '2.4k', 
+            icon: MousePointer2, 
+            trend: '+18%', 
+            trendUp: true, 
+            color: 'bg-orange-500', 
+            chartColor: '#f97316' 
+        },
     ];
 
-    // Configure chart data
-    const categoryChartData = {
-        labels: Object.keys(categoryCount),
-        datasets: [
-            {
-                label: 'Products by Category',
-                data: Object.values(categoryCount),
-                backgroundColor: [
-                    'rgba(94, 53, 177, 0.6)',
-                    'rgba(0, 137, 123, 0.6)',
-                    'rgba(233, 30, 99, 0.6)',
-                    'rgba(216, 67, 21, 0.6)',
-                    'rgba(33, 150, 243, 0.6)',
-                ],
-                borderWidth: 1,
-            },
-        ],
-    };
-
-    const revenueChartData = {
-        labels: Object.keys(monthlyRevenue),
-        datasets: [
-            {
-                label: 'Monthly Revenue',
-                data: Object.values(monthlyRevenue),
-                backgroundColor: 'rgba(76, 175, 80, 0.6)',
-            },
-        ],
-    };
-
-    const orderStatusChartData = {
-        labels: Object.keys(orderStatusCount),
-        datasets: [
-            {
-                label: 'Orders by Status',
-                data: Object.values(orderStatusCount),
-                backgroundColor: [
-                    'rgba(76, 175, 80, 0.6)',
-                    'rgba(255, 193, 7, 0.6)',
-                    'rgba(244, 67, 54, 0.6)',
-                ],
-                borderWidth: 1,
-            },
-        ],
-    };
-
-    const weeklySalesData = {
-        labels: days,
-        datasets: [
-            {
-                fill: true,
-                label: 'Weekly Sales',
-                data: weeklySales,
-                borderColor: 'rgb(94, 53, 177)',
-                backgroundColor: 'rgba(94, 53, 177, 0.1)',
-                tension: 0.4,
-            },
-        ],
-    };
-
-    const getActivityIcon = (type) => {
-        switch (type) {
-            case 'order':
-                return <ShoppingBag className="h-5 w-5" />;
-            case 'product':
-                return <Package className="h-5 w-5" />;
-            case 'revenue':
-                return <DollarSign className="h-5 w-5" />;
-            case 'customer':
-                return <Users className="h-5 w-5" />;
-            default:
-                return <Activity className="h-5 w-5" />;
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#1e293b',
+                padding: 12,
+                titleFont: { size: 14, weight: 'bold' },
+                bodyFont: { size: 13 },
+                cornerRadius: 8,
+                displayColors: false
+            }
+        },
+        scales: {
+            x: { grid: { display: false }, border: { display: false } },
+            y: { grid: { color: '#f1f5f9' }, border: { display: false } }
         }
     };
 
-    const getStatusColor = (status) => {
-        switch (status) {
-            case 'success':
-                return 'bg-green-100 text-green-800';
-            case 'warning':
-                return 'bg-yellow-100 text-yellow-800';
-            case 'error':
-                return 'bg-red-100 text-red-800';
-            case 'info':
-                return 'bg-blue-100 text-blue-800';
-            default:
-                return 'bg-gray-100 text-gray-800';
-        }
-    };
+    const recentActivities = [
+        { id: 1, type: 'order', message: 'New order #3421 received', time: '2m ago', status: 'success', icon: ShoppingBag },
+        { id: 2, type: 'stock', message: 'Product stock low: Air Max 270', time: '1h ago', status: 'warning', icon: AlertCircle },
+        { id: 3, type: 'user', message: 'New store member joined', time: '3h ago', status: 'info', icon: Users },
+        { id: 4, type: 'revenue', message: 'Daily payout processed', time: '5h ago', status: 'success', icon: DollarSign },
+    ];
 
     return (
-        <div>
-            <div className="mb-6">
-                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-                <p className="text-gray-500 dark:text-gray-400">Welcome back, {currentUser?.name || 'Admin'}. Here's an overview of your store.</p>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-8"
+        >
+            {/* Header section with Welcome message */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 className="text-3xl font-bold tracking-tight mb-1 text-slate-900 dark:text-slate-100">Analytics Overview</h2>
+                    <p className="text-slate-500 dark:text-slate-400">Track your business performance and store growth.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <Button variant="outline" className="rounded-xl border-slate-200 dark:border-slate-700 bg-white/50 backdrop-blur-sm">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        Last 30 Days
+                    </Button>
+                    <Button className="rounded-xl shadow-lg shadow-primary/20">
+                        Download Report
+                    </Button>
+                </div>
             </div>
 
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Products</div>
-                            <div className="p-2 rounded-full bg-purple-100 text-purple-600">
-                                <Package className="h-5 w-5" />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold mb-1">{products.length}</div>
-                        <div className="flex items-center text-sm">
-                            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                                <ArrowUpRight className="mr-1 h-3 w-3" /> 8% increase
-                            </Badge>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Revenue</div>
-                            <div className="p-2 rounded-full bg-green-100 text-green-600">
-                                <DollarSign className="h-5 w-5" />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold mb-1">${totalRevenue.toFixed(2)}</div>
-                        <div className="flex items-center text-sm">
-                            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                                <ArrowUpRight className="mr-1 h-3 w-3" /> 12% increase
-                            </Badge>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</div>
-                            <div className="p-2 rounded-full bg-blue-100 text-blue-600">
-                                <ShoppingBag className="h-5 w-5" />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold mb-1">{orders.length}</div>
-                        <div className="flex items-center text-sm">
-                            <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
-                                <ArrowDownRight className="mr-1 h-3 w-3" /> 2% decrease
-                            </Badge>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Items Sold</div>
-                            <div className="p-2 rounded-full bg-orange-100 text-orange-600">
-                                <ShoppingBag className="h-5 w-5" />
-                            </div>
-                        </div>
-                        <div className="text-3xl font-bold mb-1">{totalItemsSold}</div>
-                        <div className="flex items-center text-sm">
-                            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
-                                <ArrowUpRight className="mr-1 h-3 w-3" /> 5% increase
-                            </Badge>
-                        </div>
-                    </CardContent>
-                </Card>
+            {/* Stat Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat, idx) => (
+                    <motion.div key={idx} variants={itemVariants}>
+                        <Card className="border-none shadow-xl shadow-slate-200/50 dark:shadow-none bg-white dark:bg-slate-800/50 backdrop-blur-sm overflow-hidden group hover:ring-2 hover:ring-primary/10 transition-all duration-300">
+                            <CardContent className="p-6 relative">
+                                <div className="flex items-start justify-between">
+                                    <div className={`p-3 rounded-2xl ${stat.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                                        <stat.icon className="h-6 w-6" />
+                                    </div>
+                                    <div className={`flex items-center gap-1 text-sm font-bold ${stat.trendUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                                        {stat.trendUp ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                                        {stat.trend}
+                                    </div>
+                                </div>
+                                <div className="mt-6">
+                                    <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</h3>
+                                    <p className="text-3xl font-bold mt-1 text-slate-900 dark:text-slate-100">{stat.value}</p>
+                                </div>
+                                <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    <stat.icon className="h-24 w-24" />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                ))}
             </div>
 
-            {/* Main Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                {/* Weekly Sales */}
-                <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
+            {/* Main Charts Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Revenue Chart */}
+                <motion.div variants={itemVariants} className="lg:col-span-2">
+                    <Card className="h-full border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 backdrop-blur-sm p-8">
+                        <CardHeader className="p-0 mb-8 flex flex-row items-center justify-between">
                             <div>
-                                <CardTitle>Weekly Sales</CardTitle>
-                                <CardDescription>Your sales performance this week</CardDescription>
+                                <CardTitle className="text-xl font-bold">Revenue Growth</CardTitle>
+                                <CardDescription>Daily revenue stats for the current period</CardDescription>
                             </div>
-                            <Badge variant="outline" className="flex items-center">
-                                <Calendar className="mr-1 h-3 w-3" />
-                                This Week
-                            </Badge>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="px-6">
-                        <div className="h-[300px]">
-                            <Line
-                                data={weeklySalesData}
-                                options={{
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        legend: {
-                                            display: false,
-                                        },
-                                    },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            ticks: {
-                                                callback: (value) => `$${value}`,
-                                            },
-                                        },
-                                    },
-                                }}
+                            <Badge variant="soft" className="bg-emerald-50 text-emerald-600 border-emerald-100">+12% vs last month</Badge>
+                        </CardHeader>
+                        <CardContent className="p-0 h-[350px]">
+                            <Line 
+                                data={{
+                                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                                    datasets: [{
+                                        fill: true,
+                                        label: 'Revenue',
+                                        data: [3200, 4100, 3800, 5200, 4800, 6100, 5900],
+                                        borderColor: '#3b82f6',
+                                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                                        tension: 0.4,
+                                        pointRadius: 4,
+                                        pointBackgroundColor: '#fff',
+                                        pointBorderColor: '#3b82f6',
+                                        pointBorderWidth: 2
+                                    }]
+                                }} 
+                                options={chartOptions} 
                             />
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </motion.div>
 
-                {/* Recent Activity */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Recent Activity</CardTitle>
-                        <CardDescription>Latest activities in your store</CardDescription>
-                    </CardHeader>
-                    <CardContent className="px-6">
-                        <div className="space-y-5">
-                            {recentActivities.map((activity, index) => (
-                                <div key={index} className="flex items-start gap-4">
-                                    <div className={`p-2 rounded-full ${getStatusColor(activity.status)}`}>
-                                        {getActivityIcon(activity.type)}
-                                    </div>
-                                    <div className="flex-1 space-y-1">
-                                        <div className="flex justify-between items-center">
-                                            <p className="font-medium text-sm">{activity.message}</p>
-                                            <span className="text-xs text-gray-500">{activity.time}</span>
+                {/* Categories Distribution */}
+                <motion.div variants={itemVariants}>
+                    <Card className="h-full border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 backdrop-blur-sm p-8">
+                        <CardHeader className="p-0 mb-8">
+                            <CardTitle className="text-xl font-bold">Sales by Category</CardTitle>
+                            <CardDescription>Product distribution by sales</CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-0">
+                            <div className="h-[250px] relative">
+                                <Doughnut 
+                                    data={{
+                                        labels: ['Electronics', 'Fashion', 'Home', 'Lifestyle'],
+                                        datasets: [{
+                                            data: [45, 25, 15, 15],
+                                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
+                                            borderWidth: 0,
+                                            hoverOffset: 20
+                                        }]
+                                    }}
+                                    options={{
+                                        cutout: '75%',
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: { legend: { display: false } }
+                                    }}
+                                />
+                                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                    <span className="text-3xl font-bold">1.2k</span>
+                                    <span className="text-xs text-slate-500">Total Sales</span>
+                                </div>
+                            </div>
+                            <div className="mt-8 space-y-3">
+                                {[
+                                    { label: 'Electronics', value: '45%', color: 'bg-blue-500' },
+                                    { label: 'Fashion', value: '25%', color: 'bg-emerald-500' },
+                                    { label: 'Home', value: '15%', color: 'bg-amber-500' },
+                                ].map((cat, idx) => (
+                                    <div key={idx} className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`h-2.5 w-2.5 rounded-full ${cat.color}`} />
+                                            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{cat.label}</span>
                                         </div>
-                                        {activity.amount && (
-                                            <p className="text-sm text-gray-500">{activity.amount}</p>
-                                        )}
-                                        {activity.product && (
-                                            <p className="text-sm text-gray-500">{activity.product}</p>
-                                        )}
-                                        {activity.customer && (
-                                            <p className="text-sm text-gray-500">{activity.customer}</p>
-                                        )}
+                                        <span className="text-sm font-bold">{cat.value}</span>
                                     </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            </div>
+
+            {/* Bottom Row - Recent Activity & Top Products */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Recent Activity */}
+                <motion.div variants={itemVariants}>
+                    <Card className="border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 backdrop-blur-sm p-8">
+                        <CardHeader className="p-0 mb-6 flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="text-xl font-bold">Live Feed</CardTitle>
+                                <CardDescription>Real-time updates from your shop</CardDescription>
+                            </div>
+                            <Button variant="ghost" size="sm" className="text-primary font-medium hover:bg-primary/5">View All</Button>
+                        </CardHeader>
+                        <CardContent className="p-0 space-y-6">
+                            {recentActivities.map((activity, idx) => (
+                                <div key={idx} className="flex gap-4 group">
+                                    <div className={`h-10 w-10 shrink-0 rounded-xl flex items-center justify-center
+                                        ${activity.status === 'success' ? 'bg-emerald-50 text-emerald-600' : 
+                                          activity.status === 'warning' ? 'bg-amber-50 text-amber-600' : 'bg-blue-50 text-blue-600'}`}
+                                    >
+                                        <activity.icon className="h-5 w-5" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors">{activity.message}</p>
+                                        <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                            <Clock className="h-3 w-3" /> {activity.time}
+                                        </p>
+                                    </div>
+                                    <Badge variant="soft" className="h-fit">Live</Badge>
                                 </div>
                             ))}
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
+                {/* Quick Shortcuts / Insights */}
+                <motion.div variants={itemVariants}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 h-full">
+                        <Card className="border-none shadow-xl shadow-slate-200/50 bg-primary text-white p-8 relative overflow-hidden">
+                            <div className="relative z-10">
+                                <Info className="h-8 w-8 mb-4 opacity-50" />
+                                <h3 className="text-xl font-bold">New Insights Available</h3>
+                                <p className="text-white/80 mt-2 text-sm">We've identified 3 new opportunities for your store growth based on your recent traffic data.</p>
+                                <Button className="mt-8 bg-white text-primary border-none hover:bg-white/90 font-bold rounded-xl w-full">Learn More</Button>
+                            </div>
+                            <div className="absolute -right-8 -bottom-8 h-40 w-40 bg-white/10 rounded-full blur-3xl" />
+                        </Card>
+                        
+                        <div className="space-y-6">
+                            <Card className="border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 p-6 flex items-center gap-4 hover:scale-105 transition-transform cursor-pointer">
+                                <div className="h-12 w-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                    <Package className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Inventory</p>
+                                    <p className="text-lg font-bold">Check Stock</p>
+                                </div>
+                            </Card>
+                            
+                            <Card className="border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 p-6 flex items-center gap-4 hover:scale-105 transition-transform cursor-pointer">
+                                <div className="h-12 w-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                                    <Users className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Engagement</p>
+                                    <p className="text-lg font-bold">Manage Users</p>
+                                </div>
+                            </Card>
+                            
+                            <Card className="border-none shadow-xl shadow-slate-200/50 bg-white dark:bg-slate-800/50 p-6 flex items-center gap-4 hover:scale-105 transition-transform cursor-pointer">
+                                <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                    <SettingsIcon className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-slate-500 uppercase font-bold tracking-wider">Configuration</p>
+                                    <p className="text-lg font-bold">Store Settings</p>
+                                </div>
+                            </Card>
                         </div>
-                    </CardContent>
-                    <CardFooter className="px-6 py-3 border-t">
-                        <a href="#" className="text-sm text-blue-600 hover:underline">View all activity</a>
-                    </CardFooter>
-                </Card>
+                    </div>
+                </motion.div>
             </div>
-
-            {/* Charts */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Products by Category</CardTitle>
-                        <CardDescription>
-                            Distribution of your product catalog
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-[250px]">
-                            {products.length > 0 ? (
-                                <Doughnut
-                                    data={categoryChartData}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: {
-                                                position: 'bottom',
-                                            }
-                                        }
-                                    }}
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
-                                    No product data available
-                                </div>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Monthly Revenue</CardTitle>
-                        <CardDescription>
-                            Your revenue trend over time
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-[250px]">
-                            {orders.length > 0 ? (
-                                <Bar
-                                    data={revenueChartData}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: {
-                                                display: false
-                                            }
-                                        }
-                                    }}
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
-                                    No order data available
-                                </div>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Order Status</CardTitle>
-                        <CardDescription>
-                            Distribution of your order statuses
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-[250px]">
-                            {orders.length > 0 ? (
-                                <Doughnut
-                                    data={orderStatusChartData}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: {
-                                                position: 'bottom',
-                                            }
-                                        }
-                                    }}
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
-                                    No order data available
-                                </div>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+        </motion.div>
     );
 };
 
-export default DashboardAnalysis; 
+export default DashboardAnalysis;

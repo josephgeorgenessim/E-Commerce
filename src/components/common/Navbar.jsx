@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { selectCurrentUser, selectIsAuthenticated } from '../../features/users/usersSlice';
 import { selectCartItemCount } from '../../features/cart/cartSlice';

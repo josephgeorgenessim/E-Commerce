@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { setCurrentUser, selectCurrentUser, selectIsAuthenticated } from '../../features/users/usersSlice';
+import { selectCurrentUser, selectIsAuthenticated } from '../../features/users/usersSlice';
 import { selectCartItemCount } from '../../features/cart/cartSlice';
 import { selectWebsiteName } from '../../features/settings/settingsSlice';
 import LogoutButton from './LogoutButton';
@@ -36,7 +36,6 @@ import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
 
 const Navbar = ({ onCartClick }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = useSelector(selectCurrentUser);
